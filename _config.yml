@@ -1,0 +1,4 @@
+title: My Awesome Blog
+description: A blog powered by GitHub Pages and Jekyll.
+baseurl: ""  # leave empty unless deploying to a subfolder
+url: "https://gaspardol.github.io"  # replace with your GitHub Pages URL

@@ -1,0 +1,58 @@
+/* Base styling */
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #333;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Container to center content */
+.container {
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Header styles */
+header {
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 30px;
+}
+header h1 {
+    font-size: 2.5em;
+    margin: 0;
+}
+header a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Post listing */
+.post {
+    margin-bottom: 40px;
+}
+.post-title {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+.post-meta {
+    font-size: 0.9em;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+/* Article content */
+article {
+    margin-bottom: 60px;
+}
+
+/* Links */
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
