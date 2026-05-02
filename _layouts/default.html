@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
 </head>
 <body>
+  <div id="scroll-progress"></div>
   <div class="container">
     <header>
       <h1><a href="{{ site.baseurl | prepend: site.url }}">{{ site.title }}</a></h1>
@@ -14,5 +15,6 @@
     </header>
     {{ content }}
   </div>
+  <script src="{{ "/assets/js/scroll-animations.js" | relative_url }}"></script>
 </body>
 </html>
