@@ -3,12 +3,123 @@ layout: default
 title: Home
 ---
 
-{% for post in site.posts %}
-  <div class="post">
-    <h2 class="post-title">
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-    </h2>
-    <p class="post-meta">{{ post.date | date: "%B %d, %Y" }}</p>
-    <p>{{ post.excerpt }}</p>
+<!-- ── Hero ── -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <h1>Hi, I'm Gaspard</h1>
+    <p>Developer &nbsp;·&nbsp; Builder &nbsp;·&nbsp; Thinker</p>
   </div>
-{% endfor %}
+  <div class="scroll-hint">scroll</div>
+</section>
+
+<!-- ── About ── -->
+<div class="section-divider"></div>
+<section id="about">
+  <h2 class="reveal">About me</h2>
+  <p class="reveal" style="transition-delay:0.15s">
+    I build things for the web and beyond. I'm passionate about clean code,
+    thoughtful design, and using technology to solve real problems.
+  </p>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num" data-target="42" data-suffix="+">0</div>
+      <div class="stat-label">Projects</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-target="5" data-suffix=" yrs">0</div>
+      <div class="stat-label">Experience</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-target="12" data-suffix="k">0</div>
+      <div class="stat-label">Commits</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-target="3" data-suffix="">0</div>
+      <div class="stat-label">Continents</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── What I do ── -->
+<div class="section-divider"></div>
+<section id="work">
+  <h2 class="reveal">What I do</h2>
+  <p class="reveal" style="transition-delay:0.15s">From zero to production — I cover the full stack.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🖥️</div>
+      <h3>Frontend</h3>
+      <p>Pixel-perfect interfaces with smooth interactions that feel alive.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚙️</div>
+      <h3>Backend</h3>
+      <p>Scalable APIs and data pipelines built to last and easy to maintain.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h3>ML / AI</h3>
+      <p>Turning messy data into models that actually work in the real world.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">☁️</div>
+      <h3>DevOps</h3>
+      <p>CI/CD, containers, and cloud infrastructure that ships fast and stays up.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Timeline ── -->
+<div class="section-divider"></div>
+<section id="journey">
+  <h2 class="reveal">Journey</h2>
+  <p class="reveal" style="transition-delay:0.15s">A few stops along the way.</p>
+
+  <div class="timeline">
+    <div class="timeline-item reveal from-left">
+      <span>2025 — Present</span>
+      <h3>Senior Engineer</h3>
+      <p>Leading architecture decisions and mentoring a team of five across two time zones.</p>
+    </div>
+    <div class="timeline-item reveal from-left" style="transition-delay:0.1s">
+      <span>2023 — 2025</span>
+      <h3>Full-Stack Developer</h3>
+      <p>Built and shipped three products from scratch, reaching 50k monthly active users.</p>
+    </div>
+    <div class="timeline-item reveal from-left" style="transition-delay:0.2s">
+      <span>2021 — 2023</span>
+      <h3>MSc Computer Science</h3>
+      <p>Specialised in machine learning and distributed systems. Thesis on graph neural networks.</p>
+    </div>
+    <div class="timeline-item reveal from-left" style="transition-delay:0.3s">
+      <span>2018 — 2021</span>
+      <h3>BSc Mathematics</h3>
+      <p>Built a strong foundation in algorithms, probability, and linear algebra.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Writing ── -->
+<div class="section-divider"></div>
+<section id="writing">
+  <h2 class="reveal">Writing</h2>
+  <p class="reveal" style="transition-delay:0.15s">Occasional thoughts on code, craft, and ideas.</p>
+
+  <div class="cards">
+    {% for post in site.posts %}
+    <div class="card">
+      <div class="card-icon">📝</div>
+      <h3><a href="{{ post.url | relative_url }}" style="color:inherit;text-decoration:none">{{ post.title }}</a></h3>
+      <p>{{ post.date | date: "%B %d, %Y" }} &nbsp;·&nbsp; {{ post.excerpt | strip_html | truncate: 80 }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <p>Built with Jekyll &amp; a lot of scroll events &nbsp;·&nbsp; <a href="https://github.com/gaspardol" style="color:#6c63ff">GitHub</a></p>
+</footer>
