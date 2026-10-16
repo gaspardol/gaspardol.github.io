@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>For fun: AI products that run themselves · Gaspard Oliviers</title>
+  <meta name="description" content="AI Stack (writing assistant + meeting notes on your Claude plan), autonomous data-science agents, and Have you seen my quant: a fully automated quant-puzzle channel.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/site.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">Gaspard Oliviers</a>
+      <nav class="nav">
+        <a href="index.html">Index</a>
+        <a href="predictive-coding.html">Predictive coding</a>
+        <a href="logic-gates.html">Logic gates</a>
+        <a href="analog.html">Analog ML</a>
+        <a href="fun.html">For fun</a>
+        <a href="kpis.html">KPIs</a>
+      </nav>
+      <button class="theme-toggle" aria-label="Toggle dark mode">Dark</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap page-hero">
+      <div class="eyebrow">For fun</div>
+      <h1>AI products that <em>run themselves.</em></h1>
+      <p class="lede">What I build when I'm not doing research: small products where Claude does the work end to end, from a writing assistant on my own laptop to a media channel that publishes every night without me.</p>
+    </div>
+
+    <div class="wrap">
+      <div style="border-top:1px solid var(--ink)"></div>
+
+      <article class="project" id="ai-stack">
+        <span class="num">01</span>
+        <div>
+          <span class="label">macOS · Windows · open source</span>
+          <h2>AI Stack</h2>
+          <p>I didn't want to pay for Grammarly <i>and</i> Granola on top of Claude, so I rebuilt both, running on the Claude plan I already have.</p>
+          <ul>
+            <li><b>Writing assistant:</b> red underlines for mistakes and blue for clumsy phrasing, in every app on macOS and every text box in Chrome. Hover for the fix, or press Ctrl+Alt+A to accept everything.</li>
+            <li><b>Meeting notes:</b> it notices when a call starts, transcribes both sides on-device, and has Claude write structured notes with action items when you hang up.</li>
+          </ul>
+          <p class="muted small">Native Swift app on macOS; a Chrome extension plus a small .NET helper on Windows. Audio never leaves the computer.</p>
+          <div class="links"><a class="button dark" href="https://github.com/gaspardol/ai-stack">View on GitHub ↗</a></div>
+        </div>
+        <div class="project-media"><img src="assets/img/writing-demo.gif" alt="AI Stack correcting an email as it is typed" loading="lazy"></div>
+      </article>
+
+      <article class="project" id="datascience-agents">
+        <span class="num">02</span>
+        <div>
+          <span class="label">Autonomous agents · Kaggle</span>
+          <h2>AI for data science</h2>
+          <p>A turnkey template for an <b>autonomous multi-agent data-science team</b>. You launch the orchestrator once and it loops forever: it reads the brief, reviews finished experiments, commits improvements, decides what to try next, and spawns specialist sub-agents in parallel. Each sub-agent is a one-shot <code>claude -p</code> process that owns one file and one task.</p>
+          <table>
+            <tr><th>Competition</th><th>First → best</th><th>Rank</th></tr>
+            <tr><td>Spaceship Titanic (accuracy)</td><td>0.7973 → 0.8071</td><td>577 / 2209</td></tr>
+            <tr><td>Playground S6E6 (ROC-AUC)</td><td>0.9363 → 0.9578</td><td>720 / 1211</td></tr>
+          </table>
+          <p class="muted small">One-hour runs, no human guidance. Along the way it found and fixed a label-encoding bug, built a LightGBM + CatBoost + XGBoost blend, and engineered spatial and redshift features.</p>
+          <div class="links"><a class="button dark" href="https://github.com/gaspardol/datascience_agent">View on GitHub ↗</a></div>
+        </div>
+        <div class="project-media mustard"><img src="assets/img/datascience-results.png" alt="Score progression across two Kaggle competitions run autonomously" loading="lazy"></div>
+      </article>
+
+      <article class="project" id="have-you-seen-my-quant">
+        <span class="num">03</span>
+        <div>
+          <span class="label">Fully automated media</span>
+          <h2>Have you seen my quant</h2>
+          <p>An experiment in a <b>fully automated AI product</b>: short, animated explainers of classic quant and probability interview puzzles, with no human in the loop. Every night a pipeline:</p>
+          <ul class="pipeline">
+            <li>writes new puzzle scripts</li><li>animates every scene</li><li>runs Monte-Carlo proofs</li><li>narrates &amp; captions</li><li>quality-gates the video</li><li>posts it</li><li>reads the views back</li>
+          </ul>
+          <p>The view counts feed back into what it makes next. The puzzles also live on <a href="https://haveyouseenmyquant.github.io/">the road</a>, a free, Duolingo-style path through probability and maths where every question is drawn rather than written.</p>
+          <div class="stats">
+            <div><span data-kpi="views">—</span><span>Total views</span></div>
+            <div><span data-kpi-detail="views.videos">—</span><span>Reels published</span></div>
+          </div>
+          <div class="links">
+            <a class="button dark" href="https://www.instagram.com/have_you_seen_my_quant/">@have_you_seen_my_quant ↗</a>
+            <a class="button" href="https://haveyouseenmyquant.github.io/">The road ↗</a>
+          </div>
+        </div>
+        <div class="project-media lilac phone"><img src="assets/img/quant-reel.png" alt="Frame from the bridge-and-torch puzzle reel" loading="lazy"></div>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-mark">Gaspard<br>Oliviers</div>
+        <div class="footer-col"><span class="label">Research</span><a href="predictive-coding.html">Predictive coding</a><a href="logic-gates.html">Logic gate networks</a><a href="analog.html">Analog ML</a></div>
+        <div class="footer-col"><span class="label">Building</span><a href="fun.html#ai-stack">AI Stack</a><a href="fun.html#datascience-agents">Data-science agents</a><a href="fun.html#have-you-seen-my-quant">Have you seen my quant</a><a href="kpis.html">KPIs</a></div>
+        <div class="footer-col"><span class="label">Elsewhere</span><a href="https://scholar.google.com/citations?user=_jjDIqEAAAAJ">Google Scholar</a><a href="https://github.com/gaspardol">GitHub</a><a href="https://www.instagram.com/have_you_seen_my_quant/">Instagram</a></div>
+      </div>
+      <div class="footer-base"><span>© 2026 Gaspard Oliviers</span><span>Hand-built · KPIs refresh daily · <a href="https://github.com/gaspardol/gaspardol.github.io">Source</a></span></div>
+    </div>
+  </footer>
+</body>
+</html>

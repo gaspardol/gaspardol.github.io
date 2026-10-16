@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Logic gate networks, trained in your browser · Gaspard Oliviers</title>
+  <meta name="description" content="Neural networks whose neurons are logic gates: train one live, watch the gates sharpen, then freeze it into a pure logic circuit.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/site.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" defer
+          onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+  <script src="assets/dlgn.js" defer></script>
+  <script src="assets/logic-gates.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">Gaspard Oliviers</a>
+      <nav class="nav">
+        <a href="index.html">Index</a>
+        <a href="predictive-coding.html">Predictive coding</a>
+        <a href="logic-gates.html">Logic gates</a>
+        <a href="analog.html">Analog ML</a>
+        <a href="fun.html">For fun</a>
+        <a href="kpis.html">KPIs</a>
+      </nav>
+      <button class="theme-toggle" aria-label="Toggle dark mode">Dark</button>
+    </div>
+  </header>
+
+  <main class="article">
+    <div class="wrap page-hero">
+      <div class="eyebrow">Research interest 02</div>
+      <h1>Logic gate networks</h1>
+      <p class="lede">A normal neuron multiplies and adds hundreds of numbers. A logic gate neuron reads <b>two bits</b> and applies AND, OR, XOR or another two-input gate. The trick is to let the network <b>learn which gate</b> each neuron should be, and then throw the maths away: what's left is a circuit.</p>
+    </div>
+    <div class="wrap"><hr class="rule"></div>
+
+    <div class="wrap article-grid">
+      <nav class="toc" aria-label="On this page">
+        <span class="label">On this page</span>
+        <a href="#train-one-yourself">Train one yourself</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#why-it-s-interesting">Why it matters</a>
+        <a href="#where-i-d-use-it">Use cases</a>
+      </nav>
+      <div>
+
+    <h2 id="train-one-yourself">Train one yourself</h2>
+    <p>Below is a tiny network looking at a 2×2 image (the four squares on the left). Every neuron starts as a random mix of all 16 gates. Press <b>Train</b> and watch each neuron commit to one gate. Then press <b>Freeze</b>: every neuron keeps its favourite gate, and the network becomes ordinary digital logic. Click the input squares to test it.</p>
+
+    <figure class="figure wide fig-mustard">
+          <div class="fig-head"><span class="label">Fig. 1 — A logic gate network, trained live</span><span class="label">click gates · flip inputs</span></div>
+      <div class="lg-layout">
+        <svg id="lg-net" role="img" aria-label="Logic gate network diagram"></svg>
+        <div class="lg-side">
+          <div>
+            <div class="small muted">Task</div>
+            <select id="lg-task" class="btn" style="width:100%"></select>
+          </div>
+          <div class="small"><b id="lg-status">Untrained.</b></div>
+          <div class="small">Correct answer for this input: <b id="lg-target">—</b><br><span class="muted" id="lg-accuracy"></span></div>
+          <div>
+            <div class="small muted">Training loss <span id="lg-loss-value"></span> · step <span id="lg-step">0</span></div>
+            <svg id="lg-loss" viewBox="0 0 220 60" style="width:100%;height:60px"></svg>
+          </div>
+          <div id="lg-gates"></div>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn primary" id="lg-train">Train</button>
+        <button class="btn" id="lg-freeze" aria-pressed="false">Freeze into a circuit</button>
+        <button class="btn" id="lg-rewire">Re-wire randomly</button>
+        <span class="readout">click a gate to see its 16 probabilities · click inputs to flip them</span>
+      </div>
+      <figcaption>Gold = 1, grey = 0. While soft, wires carry probabilities, shown as brightness. Box borders thicken as a neuron becomes sure of its gate. The network is 12 → 8 → 4 → 2 → 1 gates with fixed random wiring, trained with Adam on all 16 possible images, all in this page's JavaScript.</figcaption>
+    </figure>
+
+    <h3 id="how-it-works">How it works</h3>
+    <ol class="steps">
+      <li><div><b>Fix the wiring.</b> Every neuron gets two inputs from the layer below, chosen at random once.</div></li>
+      <li><div><b>Make gates differentiable.</b> On real numbers in [0, 1], AND becomes \(a\cdot b\), OR becomes \(a+b-ab\), XOR becomes \(a+b-2ab\), and so on (table below). On 0s and 1s these give exactly the truth tables.</div></li>
+      <li><div><b>Learn a mixture.</b> Each neuron outputs a softmax-weighted average of its 16 relaxed gates. Gradient descent tunes the 16 weights per neuron.</div></li>
+      <li><div><b>Freeze.</b> Keep each neuron's most likely gate. The network is now a Boolean circuit with no multiplications at all.</div></li>
+      <li><div><b>Run at logic speed.</b> A CPU evaluates one gate on 64 inputs at once with a single bitwise instruction, and FPGAs and chips implement gates directly.</div></li>
+    </ol>
+
+    <table class="gate-table" id="gate-table" aria-label="The 16 two-input gates and their relaxations"></table>
+
+    <h3 id="why-it-s-interesting">Why it's interesting</h3>
+    <p>Inference costs almost nothing. In the original paper, logic gate networks classified <b>more than a million MNIST images per second on a single CPU core</b> (<a href="https://arxiv.org/abs/2210.08277">Petersen et al., NeurIPS 2022</a>). The convolutional version scales to CIFAR-10 while using far fewer gates than earlier approaches (<a href="https://arxiv.org/abs/2411.04732">Petersen et al., NeurIPS 2024</a>). The price is a harder training problem: the gates are discrete, so you need good relaxations, initialisations and wiring.</p>
+
+    <h3 id="where-i-d-use-it">Where I'd use it</h3>
+    <ul>
+      <li><b>Medical implants and wearables.</b> A closed-loop neurostimulator has to decide in microseconds, on a battery that must last for years. A logic circuit fits in that budget.</li>
+      <li><b>FPGAs and custom chips.</b> A trained network maps one-to-one onto lookup tables, with no multipliers and no floating point.</li>
+      <li><b>Always-on sensing.</b> Keyword spotting, anomaly detection and event cameras: cheap enough to run all the time, on the device, keeping data private.</li>
+    </ul>
+
+    <div class="callout">
+      <b>My implementation:</b> <a href="https://github.com/gaspardol/silogic">silogic</a> is a compact, hackable PyTorch library for differentiable logic-gate networks: fully connected and convolutional logic layers, several gate parameterisations, n-input lookup-table nodes and fused Triton kernels. A trained model discretises into integer truth-table lookups that map directly onto FPGA/ASIC LUTs.
+    </div>
+        <p class="small muted" style="margin-top:20px">Next: <a href="analog.html">analog machine learning →</a></p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-mark">Gaspard<br>Oliviers</div>
+        <div class="footer-col"><span class="label">Research</span><a href="predictive-coding.html">Predictive coding</a><a href="logic-gates.html">Logic gate networks</a><a href="analog.html">Analog ML</a></div>
+        <div class="footer-col"><span class="label">Building</span><a href="fun.html#ai-stack">AI Stack</a><a href="fun.html#datascience-agents">Data-science agents</a><a href="fun.html#have-you-seen-my-quant">Have you seen my quant</a><a href="kpis.html">KPIs</a></div>
+        <div class="footer-col"><span class="label">Elsewhere</span><a href="https://scholar.google.com/citations?user=_jjDIqEAAAAJ">Google Scholar</a><a href="https://github.com/gaspardol">GitHub</a><a href="https://www.instagram.com/have_you_seen_my_quant/">Instagram</a></div>
+      </div>
+      <div class="footer-base"><span>© 2026 Gaspard Oliviers</span><span>Hand-built · KPIs refresh daily · <a href="https://github.com/gaspardol/gaspardol.github.io">Source</a></span></div>
+    </div>
+  </footer>
+</body>
+</html>

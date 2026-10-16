@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Predictive coding, explained with an energy machine · Gaspard Oliviers</title>
+  <meta name="description" content="A lean, interactive explanation of predictive coding: networks that learn by minimising an energy made of prediction errors.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/site.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" defer
+          onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+  <script src="assets/energy-machine.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">Gaspard Oliviers</a>
+      <nav class="nav">
+        <a href="index.html">Index</a>
+        <a href="predictive-coding.html">Predictive coding</a>
+        <a href="logic-gates.html">Logic gates</a>
+        <a href="analog.html">Analog ML</a>
+        <a href="fun.html">For fun</a>
+        <a href="kpis.html">KPIs</a>
+      </nav>
+      <button class="theme-toggle" aria-label="Toggle dark mode">Dark</button>
+    </div>
+  </header>
+
+  <main class="article">
+    <div class="wrap page-hero">
+      <div class="eyebrow">Research interest 01</div>
+      <h1>Predictive coding</h1>
+      <p class="lede">Your brain isn't a camera; it's a prediction machine. Each level of the cortex guesses what the level below should be seeing, and only the <b>surprise</b>, the prediction error, needs to travel. Learning means getting surprised less often.</p>
+    </div>
+    <div class="wrap"><hr class="rule"></div>
+
+    <div class="wrap article-grid">
+      <nav class="toc" aria-label="On this page">
+        <span class="label">On this page</span>
+        <a href="#energy-machine">The energy machine</a>
+        <a href="#four-steps">Four steps</a>
+        <a href="#maths">Three lines of maths</a>
+        <a href="#why">Why it matters</a>
+        <a href="#video">The best video</a>
+        <a href="#my-work">My work</a>
+      </nav>
+      <div>
+        <h2 id="energy-machine">The energy machine</h2>
+        <p>Picture every layer of a network as a bead on a rail. The layer above holds a guess of where that bead should be (the dashed circle). When guess and bead disagree, a <b>spring</b> between them stretches. Add up the tension in all the springs and you get the network's <b>energy</b>: a single number that says how surprised the network is.</p>
+
+        <figure class="figure wide fig-mint">
+          <div class="fig-head"><span class="label">Fig. 1 — The energy machine</span><span class="label">drag any bead</span></div>
+          <div class="stage"><canvas id="energy-canvas" width="1000" height="440" aria-label="Interactive energy machine: three layers connected by springs"></canvas></div>
+          <div class="controls">
+            <button class="btn primary" id="em-new">Show a new input</button>
+            <button class="btn" id="em-relax" aria-pressed="true">Relax</button>
+            <button class="btn" id="em-learn" aria-pressed="false">Learn</button>
+            <button class="btn" id="em-auto" aria-pressed="true">Auto-play</button>
+            <button class="btn" id="em-reset">Reset</button>
+            <span class="readout" id="energy-readout"></span>
+          </div>
+          <figcaption>
+            <span class="legend">
+              <span style="--c:var(--accent)">free neuron</span>
+              <span style="--c:var(--ink)">input, clamped to data</span>
+              <span style="--c:var(--pred)">top-down prediction</span>
+              <span style="--c:var(--err)">spring = prediction error</span>
+            </span>
+            Drag any bead and let go. The free beads slide until the springs balance, and the energy always goes down. Switch on <b>Learn</b> and the weights adapt, so that new inputs leave less tension behind (the red dots).
+          </figcaption>
+        </figure>
+
+        <h3 id="four-steps">What just happened, in four steps</h3>
+        <ol class="steps">
+          <li><div><b>Predict.</b> Each layer sends a guess downwards: the bead above, multiplied by a weight \(w\).</div></li>
+          <li><div><b>Compare.</b> Wherever a guess is off, an error appears, \(\varepsilon = x - w\,x_{\text{above}}\). That's a stretched spring.</div></li>
+          <li><div><b>Relax (inference).</b> The free beads move downhill on the energy. Each one only feels <i>its own</i> spring and the springs it pulls on just below. Nothing global is needed.</div></li>
+          <li><div><b>Learn.</b> Once things settle, each weight changes by <i>error below × activity above</i>. Next time, the same input leaves the springs looser. It's a local, Hebbian rule, and there's no separate backward pass.</div></li>
+        </ol>
+
+        <h3 id="maths">The same thing in three lines</h3>
+        <p>For a network whose layer \(\ell+1\) predicts layer \(\ell\) through weights \(W_\ell\) and a nonlinearity \(f\):</p>
+        <div class="math">$$E \;=\; \tfrac12 \sum_{\ell} \big\lVert \underbrace{x_\ell - f(W_\ell\, x_{\ell+1})}_{\varepsilon_\ell} \big\rVert^2$$</div>
+        <div class="math">$$\text{inference:}\quad \dot x_\ell \;=\; -\frac{\partial E}{\partial x_\ell} \;=\; -\,\varepsilon_\ell \;+\; W_{\ell-1}^{\top}\big(\varepsilon_{\ell-1}\odot f'(W_{\ell-1}x_\ell)\big)$$</div>
+        <div class="math">$$\text{learning:}\quad \Delta W_\ell \;\propto\; -\frac{\partial E}{\partial W_\ell} \;=\; \big(\varepsilon_\ell \odot f'(W_\ell x_{\ell+1})\big)\, x_{\ell+1}^{\top}$$</div>
+        <p>Every quantity in these updates sits right next to the synapse that uses it. That's the whole appeal.</p>
+
+        <h2 id="why">Why I find it exciting</h2>
+        <ul>
+          <li><b>It's local.</b> Neurons and synapses only use signals that are physically next to them. That's plausible for brains and natural for parallel, neuromorphic or <a href="analog.html">analog hardware</a>.</li>
+          <li><b>It's a close cousin of backprop.</b> Under some conditions, its weight updates approximate or even match backpropagation's gradients (<a href="https://doi.org/10.1162/NECO_a_00949">Whittington &amp; Bogacz, 2017</a>).</li>
+          <li><b>It's more than a classifier.</b> The same energy can generate data, fill in missing parts, and represent uncertainty. Adding a little noise to inference turns it into sampling, which is the idea behind <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012532">Monte Carlo predictive coding</a>.</li>
+        </ul>
+
+        <h2 id="video">The best video explanation I know</h2>
+        <p>Artem Kirsanov derives predictive coding from first principles, from the credit assignment problem through the energy formalism to the activity and weight updates, with beautiful animations.</p>
+        <div class="video">
+          <iframe src="https://www.youtube-nocookie.com/embed/l-OLgbdZ3kk" title="The Brain’s Learning Algorithm Isn’t Backpropagation — Artem Kirsanov" loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+
+        <h2 id="my-work">My work on it</h2>
+        <ul class="papers">
+          <li><a href="https://arxiv.org/abs/2505.23415">Bidirectional predictive coding</a><div class="venue">Oliviers, Tang, Bogacz · ICLR 2026 · <a href="https://github.com/gaspardol/BidirectionalPredictiveCoding">code</a></div></li>
+          <li><a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012532">Learning probability distributions of sensory inputs with Monte Carlo predictive coding</a><div class="venue">Oliviers, Bogacz, Meulemans · PLOS Computational Biology 2024 · <a href="https://github.com/gaspardol/MonteCarloPredictiveCoding">code</a></div></li>
+          <li><a href="https://arxiv.org/abs/2407.01163">Benchmarking Predictive Coding Networks — Made Simple</a><div class="venue">Pinchetti, Qi, Lokshyn, … Oliviers, … · ICLR 2025 · <a href="https://github.com/liukidar/pcx">PCX library</a></div></li>
+          <li><a href="https://arxiv.org/abs/2505.20137">ePC: Fast and Deep Predictive Coding in Digital Simulation</a><div class="venue">Goemaere, Oliviers, Bogacz, Demeester · arXiv 2025</div></li>
+          <li><a href="https://arxiv.org/abs/2605.11911">Understanding Sample Efficiency in Predictive Coding</a><div class="venue">Oliviers, Lominadze, Bogacz · arXiv 2026</div></li>
+          <li>An analysis and extension of predictive coding for learning in the brain<div class="venue">DPhil thesis · University of Oxford, 2026</div></li>
+        </ul>
+        <p class="small muted" style="margin-top:16px">Full list on <a href="https://scholar.google.com/citations?user=_jjDIqEAAAAJ">Google Scholar</a>. Next: <a href="logic-gates.html">logic gate networks →</a></p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-mark">Gaspard<br>Oliviers</div>
+        <div class="footer-col"><span class="label">Research</span><a href="predictive-coding.html">Predictive coding</a><a href="logic-gates.html">Logic gate networks</a><a href="analog.html">Analog ML</a></div>
+        <div class="footer-col"><span class="label">Building</span><a href="fun.html#ai-stack">AI Stack</a><a href="fun.html#datascience-agents">Data-science agents</a><a href="fun.html#have-you-seen-my-quant">Have you seen my quant</a><a href="kpis.html">KPIs</a></div>
+        <div class="footer-col"><span class="label">Elsewhere</span><a href="https://scholar.google.com/citations?user=_jjDIqEAAAAJ">Google Scholar</a><a href="https://github.com/gaspardol">GitHub</a><a href="https://www.instagram.com/have_you_seen_my_quant/">Instagram</a></div>
+      </div>
+      <div class="footer-base"><span>© 2026 Gaspard Oliviers</span><span>Hand-built · KPIs refresh daily · <a href="https://github.com/gaspardol/gaspardol.github.io">Source</a></span></div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KPIs · Gaspard Oliviers</title>
+  <meta name="description" content="Live counters: Google Scholar citations, GitHub stars, and views on Have you seen my quant.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/site.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">Gaspard Oliviers</a>
+      <nav class="nav">
+        <a href="index.html">Index</a>
+        <a href="predictive-coding.html">Predictive coding</a>
+        <a href="logic-gates.html">Logic gates</a>
+        <a href="analog.html">Analog ML</a>
+        <a href="fun.html">For fun</a>
+        <a href="kpis.html">KPIs</a>
+      </nav>
+      <button class="theme-toggle" aria-label="Toggle dark mode">Dark</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap page-hero">
+      <div class="eyebrow">KPIs</div>
+      <h1>Three numbers I keep <em>an eye on.</em></h1>
+      <p class="lede">Research impact, open-source traction, and the reach of the automated products. They update themselves every day.</p>
+    </div>
+
+    <section style="padding-top:20px">
+      <div class="wrap">
+        <div class="kpi-board">
+          <article class="kpi-card reveal">
+            <span class="label">01 — Research · Google Scholar</span>
+            <div class="value" data-kpi="citations" data-format="full">—</div>
+            <div class="detail"><b>Citations</b> · h-index <span data-kpi-detail="citations.hIndex">—</span></div>
+            <svg class="chart" data-kpi-chart="citations" role="img" aria-label="Citations over time"></svg>
+            <a href="https://scholar.google.com/citations?user=_jjDIqEAAAAJ">Scholar profile ↗</a>
+          </article>
+          <article class="kpi-card reveal">
+            <span class="label">02 — Open source · GitHub</span>
+            <div class="value" data-kpi="stars" data-format="full">—</div>
+            <div class="detail"><b>Stars</b> on my repos and the repos I've contributed to · <span data-kpi-detail="stars.top">—</span></div>
+            <svg class="chart" data-kpi-chart="stars" role="img" aria-label="Stars over time"></svg>
+            <a href="https://github.com/gaspardol">GitHub ↗</a>
+          </article>
+          <article class="kpi-card reveal">
+            <span class="label">03 — Automated media · Instagram</span>
+            <div class="value" data-kpi="views">—</div>
+            <div class="detail"><b>Views</b> across <span data-kpi-detail="views.videos">—</span> Reels · last synced <span data-kpi-detail="views.updated">—</span></div>
+            <svg class="chart" data-kpi-chart="views" role="img" aria-label="Views over time"></svg>
+            <a href="https://www.instagram.com/have_you_seen_my_quant/">@have_you_seen_my_quant ↗</a>
+          </article>
+        </div>
+        <p class="small muted" style="margin-top:26px;max-width:760px">
+          Last refresh: <span data-kpi-updated>—</span>. Citations come from the public Google Scholar profile. Stars are summed over my public repositories plus the public repositories I've committed to or had pull requests merged into. Views are the latest view count of every Reel, summed. They're collected by the same pipeline that publishes the videos, so the counter is only as fresh as its last sync. Raw data: <a href="data/kpis.json">kpis.json</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-mark">Gaspard<br>Oliviers</div>
+        <div class="footer-col"><span class="label">Research</span><a href="predictive-coding.html">Predictive coding</a><a href="logic-gates.html">Logic gate networks</a><a href="analog.html">Analog ML</a></div>
+        <div class="footer-col"><span class="label">Building</span><a href="fun.html#ai-stack">AI Stack</a><a href="fun.html#datascience-agents">Data-science agents</a><a href="fun.html#have-you-seen-my-quant">Have you seen my quant</a><a href="kpis.html">KPIs</a></div>
+        <div class="footer-col"><span class="label">Elsewhere</span><a href="https://scholar.google.com/citations?user=_jjDIqEAAAAJ">Google Scholar</a><a href="https://github.com/gaspardol">GitHub</a><a href="https://www.instagram.com/have_you_seen_my_quant/">Instagram</a></div>
+      </div>
+      <div class="footer-base"><span>© 2026 Gaspard Oliviers</span><span>Hand-built · KPIs refresh daily · <a href="https://github.com/gaspardol/gaspardol.github.io">Source</a></span></div>
+    </div>
+  </footer>
+</body>
+</html>

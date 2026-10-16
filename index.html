@@ -1,14 +1,165 @@
----
-layout: default
-title: Home
----
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gaspard Oliviers</title>
+  <meta name="description" content="Gaspard Oliviers — PhD student at the University of Oxford. Predictive coding, logic gate networks, analog machine learning, and a few fully automated AI products.">
+  <meta property="og:title" content="Gaspard Oliviers">
+  <meta property="og:description" content="Predictive coding, logic gate networks, analog machine learning — and AI products that run themselves.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/site.js" defer></script>
+  <script src="assets/hero-net.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">Gaspard Oliviers</a>
+      <nav class="nav">
+        <a href="index.html">Index</a>
+        <a href="predictive-coding.html">Predictive coding</a>
+        <a href="logic-gates.html">Logic gates</a>
+        <a href="analog.html">Analog ML</a>
+        <a href="fun.html">For fun</a>
+        <a href="kpis.html">KPIs</a>
+      </nav>
+      <button class="theme-toggle" aria-label="Toggle dark mode">Dark</button>
+    </div>
+  </header>
 
-{% for post in site.posts %}
-  <div class="post">
-    <h2 class="post-title">
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-    </h2>
-    <p class="post-meta">{{ post.date | date: "%B %d, %Y" }}</p>
-    <p>{{ post.excerpt }}</p>
-  </div>
-{% endfor %}
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow">PhD · University of Oxford</div>
+            <h1>Learning without backprop, computing <em>without clocks.</em></h1>
+            <p class="lede">I'm Gaspard. My research is on <b>predictive coding</b>, a brain-inspired way for networks to learn with purely local updates. I'm also fascinated by networks made of <b>logic gates</b> and by <b>analog circuits</b> that let physics do the maths. On the side, I build AI products that run by themselves.</p>
+            <div class="links" style="margin-top:28px">
+              <a class="chip" href="https://scholar.google.com/citations?user=_jjDIqEAAAAJ">Google Scholar ↗</a>
+              <a class="chip" href="https://github.com/gaspardol">GitHub ↗</a>
+              <a class="chip" href="https://www.instagram.com/have_you_seen_my_quant/">Instagram ↗</a>
+            </div>
+          </div>
+          <div class="hero-art">
+            <canvas id="hero-net" aria-label="An animated network of neurons exchanging messages"></canvas>
+            <div class="label"><span>Fig. 0 — a network, relaxing</span><span>move · click</span></div>
+          </div>
+        </div>
+
+        <div class="kpi-strip">
+          <a class="kpi reveal" href="kpis.html"><span class="label">Citations · Google Scholar</span><span class="value" data-kpi="citations">—</span></a>
+          <a class="kpi reveal" href="kpis.html"><span class="label">GitHub stars · repos &amp; contributions</span><span class="value" data-kpi="stars">—</span></a>
+          <a class="kpi reveal" href="kpis.html"><span class="label">Views · Have you seen my quant</span><span class="value" data-kpi="views">—</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="interests">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Three ideas, explained with <em>moving pictures.</em></h2>
+          <p>Each page is a short, hands-on explainer: drag, train and poke the models yourself.</p>
+        </div>
+        <div class="grid three">
+          <a class="block reveal" href="predictive-coding.html">
+            <span class="label">01 — Brain-inspired learning</span>
+            <h3>Predictive coding</h3>
+            <div class="art">
+              <svg viewBox="0 0 320 200" aria-hidden="true">
+                <line class="thin" x1="10" y1="40" x2="310" y2="40"/><line class="thin" x1="10" y1="100" x2="310" y2="100"/><line class="thin" x1="10" y1="160" x2="310" y2="160"/>
+                <path class="stroke" stroke-dasharray="4 5" d="M214 52 C 230 70, 150 70, 136 86"/>
+                <path class="stroke" stroke-dasharray="4 5" d="M226 112 C 250 130, 200 130, 196 146"/>
+                <path class="spring" d="M162 40 l6 -8 l8 16 l8 -16 l8 16 l8 -16 l8 16 l6 -8"/>
+                <path class="spring" d="M136 100 l8 -9 l9 18 l9 -18 l9 18 l9 -18 l9 18 l9 -18 l9 18 l8 -9"/>
+                <path class="spring" d="M196 160 l6 -7 l7 14 l7 -14 l6 7"/>
+                <circle class="hollow" cx="162" cy="40" r="10"/><circle class="fill" cx="214" cy="40" r="10"/>
+                <circle class="hollow" cx="136" cy="100" r="10"/><circle class="fill" cx="226" cy="100" r="10"/>
+                <circle class="hollow" cx="196" cy="160" r="10"/><rect class="fill" x="212" y="150" width="20" height="20" rx="4"/>
+                <text class="text" x="10" y="28">CAUSE</text><text class="text" x="10" y="88">FEATURE</text><text class="text" x="10" y="148">INPUT</text>
+              </svg>
+            </div>
+            <p>Every layer predicts the one below, and learning means shrinking the surprise. I explain it with an "energy machine" of springs you can play with.</p>
+            <span class="button">Explore the energy machine →</span>
+          </a>
+          <a class="block mustard reveal" href="logic-gates.html">
+            <span class="label">02 — Efficient AI</span>
+            <h3>Logic gate networks</h3>
+            <div class="art">
+              <svg viewBox="0 0 320 200" aria-hidden="true">
+                <path class="stroke" d="M44 40 C 90 40, 90 64, 128 64"/><path class="stroke" d="M44 100 C 90 100, 90 76, 128 76"/>
+                <path class="stroke" d="M44 100 C 90 100, 90 124, 128 124"/><path class="stroke" d="M44 160 C 90 160, 90 136, 128 136"/>
+                <path class="stroke" d="M188 70 C 220 70, 220 92, 246 92"/><path class="stroke" d="M188 130 C 220 130, 220 108, 246 108"/>
+                <path class="stroke" d="M300 100 L 314 100"/>
+                <rect class="fill" x="22" y="28" width="24" height="24" rx="5"/><rect x="22" y="88" width="24" height="24" rx="5" fill="none" stroke="currentColor" class="stroke"/><rect class="fill" x="22" y="148" width="24" height="24" rx="5"/>
+                <rect x="128" y="54" width="60" height="32" rx="8" class="stroke"/><rect x="128" y="114" width="60" height="32" rx="8" class="stroke"/><rect x="246" y="84" width="54" height="32" rx="8" class="stroke"/>
+                <text class="text" x="158" y="74" text-anchor="middle" style="font-size:12px">XOR</text><text class="text" x="158" y="134" text-anchor="middle" style="font-size:12px">AND</text><text class="text" x="273" y="104" text-anchor="middle" style="font-size:12px">OR</text>
+              </svg>
+            </div>
+            <p>Neural networks whose neurons are AND, OR and XOR gates. Train a tiny one in your browser, then freeze it into a circuit that runs at the speed of logic.</p>
+            <span class="button">Train a network →</span>
+          </a>
+          <a class="block lilac reveal" href="analog.html">
+            <span class="label">03 — Physical computing</span>
+            <h3>Analog circuits for ML</h3>
+            <div class="art">
+              <svg viewBox="0 0 320 200" aria-hidden="true">
+                <circle class="stroke" cx="40" cy="70" r="20"/><text class="text" x="40" y="74" text-anchor="middle" style="font-size:12px">y</text>
+                <path class="stroke" d="M60 70 H 104"/><path class="stroke" d="M104 42 L 160 70 L 104 98 Z"/><text class="text" x="118" y="75" style="font-size:13px">Σ</text>
+                <path class="stroke" d="M160 70 H 236 V 104"/><path class="stroke" d="M216 104 H 256 M216 116 H 256"/><path class="stroke" d="M236 116 V 150 M224 150 H 248 M229 156 H 243"/>
+                <path class="stroke" d="M236 70 H 290 V 92"/><path class="stroke" d="M290 92 l-9 5 l18 9 l-18 9 l18 9 l-18 9 l9 5 V 150 M278 150 H 302 M283 156 H 297"/>
+                <path class="stroke" d="M290 70 V 40 H 132 V 54" stroke-dasharray="4 5"/>
+                <circle class="pulse" cx="182" cy="70" r="4"/><circle class="pulse" cx="208" cy="70" r="4"/><circle class="pulse" cx="236" cy="88" r="4"/><circle class="pulse" cx="262" cy="70" r="4"/>
+              </svg>
+            </div>
+            <p>What if the hardware solved the equations by settling into them? A capacitor, a resistor and two amplifiers can do predictive-coding inference.</p>
+            <span class="button">Play with the circuit →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="fun">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>For fun: AI products that <em>run themselves.</em></h2>
+          <p>Side projects, all built on Claude: they replace paid tools, run whole data-science projects, or publish content every night.</p>
+        </div>
+        <div class="rows">
+          <a class="row-item reveal" href="fun.html#ai-stack">
+            <span class="num">01</span>
+            <div><span class="label">macOS · Windows · open source</span><h3>AI Stack</h3><p>A Grammarly-style writing assistant and a Granola-style meeting notetaker, running on the Claude plan you already have.</p><span class="button">How it works →</span></div>
+            <div class="thumb"><img src="assets/img/writing-demo.gif" alt="AI Stack correcting an email" loading="lazy"></div>
+          </a>
+          <a class="row-item reveal" href="fun.html#datascience-agents">
+            <span class="num">02</span>
+            <div><span class="label">Autonomous agents · Kaggle</span><h3>AI for data science</h3><p>An orchestrator that runs Kaggle competitions on its own: it forms hypotheses, spawns specialist agents, validates and submits.</p><span class="button">See the results →</span></div>
+            <div class="thumb"><img src="assets/img/datascience-results.png" alt="Kaggle score progression" loading="lazy" style="object-position:center"></div>
+          </a>
+          <a class="row-item reveal" href="fun.html#have-you-seen-my-quant">
+            <span class="num">03</span>
+            <div><span class="label">Fully automated media</span><h3>Have you seen my quant</h3><p>Quant interview puzzles written, animated, narrated and posted every night with no human in the loop. Millions of views so far.</p><span class="button">Inside the pipeline →</span></div>
+            <div class="thumb"><img src="assets/img/quant-reel.png" alt="A frame from an automated quant puzzle reel" loading="lazy" style="object-position:center 38%"></div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-mark">Gaspard<br>Oliviers</div>
+        <div class="footer-col"><span class="label">Research</span><a href="predictive-coding.html">Predictive coding</a><a href="logic-gates.html">Logic gate networks</a><a href="analog.html">Analog ML</a></div>
+        <div class="footer-col"><span class="label">Building</span><a href="fun.html#ai-stack">AI Stack</a><a href="fun.html#datascience-agents">Data-science agents</a><a href="fun.html#have-you-seen-my-quant">Have you seen my quant</a><a href="kpis.html">KPIs</a></div>
+        <div class="footer-col"><span class="label">Elsewhere</span><a href="https://scholar.google.com/citations?user=_jjDIqEAAAAJ">Google Scholar</a><a href="https://github.com/gaspardol">GitHub</a><a href="https://www.instagram.com/have_you_seen_my_quant/">Instagram</a></div>
+      </div>
+      <div class="footer-base"><span>© 2026 Gaspard Oliviers</span><span>Hand-built · KPIs refresh daily · <a href="https://github.com/gaspardol/gaspardol.github.io">Source</a></span></div>
+    </div>
+  </footer>
+</body>
+</html>

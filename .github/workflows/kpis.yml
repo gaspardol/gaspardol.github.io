@@ -1,0 +1,34 @@
+name: Update KPIs
+
+on:
+  schedule:
+    - cron: "17 5 * * *"   # every day, 05:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # Stars (incl. contributed repos) and Scholar citations. Instagram views come from the
+      # local video pipeline (scripts/install_local_updater.sh), so they're kept as-is here.
+      - name: Refresh numbers
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/update_kpis.py
+      - name: Commit
+        run: |
+          git config user.name "kpi-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/kpis.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update KPIs"
+            git pull --rebase
+            git push
+          fi

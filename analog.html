@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alternative ML: analog circuits · Gaspard Oliviers</title>
+  <meta name="description" content="Analog machine learning: crossbars that multiply with Ohm's law, and a small circuit that performs predictive coding inference by settling.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/site.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" defer
+          onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+  <script src="assets/circuit.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">Gaspard Oliviers</a>
+      <nav class="nav">
+        <a href="index.html">Index</a>
+        <a href="predictive-coding.html">Predictive coding</a>
+        <a href="logic-gates.html">Logic gates</a>
+        <a href="analog.html">Analog ML</a>
+        <a href="fun.html">For fun</a>
+        <a href="kpis.html">KPIs</a>
+      </nav>
+      <button class="theme-toggle" aria-label="Toggle dark mode">Dark</button>
+    </div>
+  </header>
+
+  <main class="article">
+    <div class="wrap page-hero">
+      <div class="eyebrow">Research interest 03</div>
+      <h1>Alternative ML: analog circuits</h1>
+      <p class="lede">In a digital chip, most of the energy goes into <b>moving numbers</b> between memory and arithmetic units, one clock tick at a time. Analog machine learning keeps the numbers where they live and lets <b>physics do the arithmetic</b>, continuously and in parallel.</p>
+    </div>
+    <div class="wrap"><hr class="rule"></div>
+
+    <div class="wrap article-grid">
+      <nav class="toc" aria-label="On this page">
+        <span class="label">On this page</span>
+        <a href="#multiply-add-for-free">Multiply–add for free</a>
+        <a href="#let-the-circuit-settle-into-the-answer">Settling = computing</a>
+        <a href="#a-predictive-coding-neuron-in-three-part">The circuit</a>
+        <a href="#scaling-up">Scaling up</a>
+      </nav>
+      <div>
+
+    <h2 id="multiply-add-for-free">Multiply–add for free</h2>
+    <p>Store each weight as a conductance \(G_{ij}\), for example a resistor or a memristor at a wire crossing. Put the inputs on the rows as voltages \(V_i\). Ohm's law multiplies (\(I = G\,V\)) and Kirchhoff's law adds the currents meeting on each column:</p>
+    <div class="math">$$I_j \;=\; \sum_i G_{ij}\, V_i$$</div>
+    <p>That's a whole matrix–vector product in one step, right where the weights are stored. Drive the columns instead of the rows and the same array computes the <b>transpose</b>. That will matter in a moment.</p>
+
+    <figure class="figure fig-lilac">
+          <div class="fig-head"><span class="label">Fig. 1 — A resistive crossbar</span><span class="label">Ohm + Kirchhoff</span></div>
+      <svg viewBox="0 0 640 300" role="img" aria-label="A 3 by 3 resistive crossbar computing a matrix-vector product">
+        <g>
+          <line class="xbar-line" x1="110" y1="70" x2="520" y2="70"/><line class="xbar-line" x1="110" y1="140" x2="520" y2="140"/><line class="xbar-line" x1="110" y1="210" x2="520" y2="210"/>
+          <line class="xbar-line" x1="220" y1="40" x2="220" y2="250"/><line class="xbar-line" x1="330" y1="40" x2="330" y2="250"/><line class="xbar-line" x1="440" y1="40" x2="440" y2="250"/>
+          <line class="xbar-flow" x1="220" y1="40" x2="220" y2="250"/><line class="xbar-flow" x1="330" y1="40" x2="330" y2="250" style="animation-duration:.8s"/><line class="xbar-flow" x1="440" y1="40" x2="440" y2="250" style="animation-duration:1.6s"/>
+        </g>
+        <g class="xbar-cells">
+          <rect class="xbar-cell" x="208" y="58" width="24" height="24" rx="4" fill="color-mix(in srgb, var(--accent) 70%, var(--surface))"/>
+          <rect class="xbar-cell" x="318" y="58" width="24" height="24" rx="4" fill="color-mix(in srgb, var(--accent) 25%, var(--surface))"/>
+          <rect class="xbar-cell" x="428" y="58" width="24" height="24" rx="4" fill="color-mix(in srgb, var(--accent) 45%, var(--surface))"/>
+          <rect class="xbar-cell" x="208" y="128" width="24" height="24" rx="4" fill="color-mix(in srgb, var(--accent) 20%, var(--surface))"/>
+          <rect class="xbar-cell" x="318" y="128" width="24" height="24" rx="4" fill="color-mix(in srgb, var(--accent) 85%, var(--surface))"/>
+          <rect class="xbar-cell" x="428" y="128" width="24" height="24" rx="4" fill="color-mix(in srgb, var(--accent) 10%, var(--surface))"/>
+          <rect class="xbar-cell" x="208" y="198" width="24" height="24" rx="4" fill="color-mix(in srgb, var(--accent) 55%, var(--surface))"/>
+          <rect class="xbar-cell" x="318" y="198" width="24" height="24" rx="4" fill="color-mix(in srgb, var(--accent) 35%, var(--surface))"/>
+          <rect class="xbar-cell" x="428" y="198" width="24" height="24" rx="4" fill="color-mix(in srgb, var(--accent) 15%, var(--surface))"/>
+        </g>
+        <g class="xbar-strong"><text x="40" y="75">V₁</text><text x="40" y="145">V₂</text><text x="40" y="215">V₃</text>
+          <text x="208" y="280">I₁</text><text x="318" y="280">I₂</text><text x="428" y="280">I₃</text></g>
+        <text class="xbar-text" x="72" y="30">inputs as voltages →</text>
+        <text class="xbar-text" x="470" y="100">darker = larger</text><text class="xbar-text" x="470" y="116">conductance Gᵢⱼ</text>
+        <text class="xbar-text" x="470" y="280">column currents = Σ G·V</text>
+      </svg>
+      <figcaption>A resistive crossbar. Each column current is a weighted sum of all the input voltages: a neural network layer evaluated by Ohm's and Kirchhoff's laws.</figcaption>
+    </figure>
+
+    <h2 id="let-the-circuit-settle-into-the-answer">Let the circuit settle into the answer</h2>
+    <p>Physical circuits relax into states that balance their currents, which means they minimise an energy-like quantity. If you design a circuit whose energy <i>is</i> a learning model's energy, then simply waiting <b>is</b> the computation. That's exactly the shape of <a href="predictive-coding.html">predictive coding</a>, and of related ideas like <a href="https://arxiv.org/abs/1602.05179">equilibrium propagation</a>.</p>
+
+    <h3 id="a-predictive-coding-neuron-in-three-part">A predictive coding neuron in three parts</h3>
+    <p>Here is the simplest case. One hidden cause \(x\) explains one sensor reading \(y\) through one weight \(w\), with a prior that keeps \(x\) small:</p>
+    <div class="math">$$E(x) \;=\; \tfrac12\,(\underbrace{y - w\,x}_{\varepsilon})^2 \;+\; \tfrac12\,x^2$$</div>
+
+    <figure class="figure wide fig-lilac">
+          <div class="fig-head"><span class="label">Fig. 2 — Predictive coding as a circuit</span><span class="label">move the sliders</span></div>
+      <div class="stage"><svg id="circuit" role="img" aria-label="Analog predictive coding circuit"></svg></div>
+      <svg id="circuit-plot" role="img" aria-label="Capacitor voltage and energy over time"></svg>
+      <div class="controls">
+        <label class="control">sensor y <input type="range" id="ck-y" min="-2" max="2" step="0.05" value="1.5"><output id="ck-y-out"></output></label>
+        <label class="control">weight w <input type="range" id="ck-w" min="-2" max="2" step="0.05" value="1.2"><output id="ck-w-out"></output></label>
+        <button class="btn" id="ck-kick">Kick the capacitor</button>
+        <span class="readout">gold dots = charge flowing (speed ∝ current)</span>
+      </div>
+      <figcaption>The <b>Σ</b> amplifier compares the sensor with the prediction and outputs the error. The <b>×w</b> stage turns that error into a current that charges the capacitor. The resistor leaks the capacitor back towards 0 (the prior). The capacitor voltage <i>is</i> the network's belief \(x\). Move the sliders and watch it settle on the dashed line.</figcaption>
+    </figure>
+
+    <p>Kirchhoff's current law at the capacitor gives the dynamics directly:</p>
+    <div class="math">$$C\,\frac{dx}{dt} \;=\; \underbrace{w\,\varepsilon}_{\text{error current in}} \;-\; \underbrace{x/R}_{\text{leak}} \;=\; -\frac{\partial E}{\partial x}\qquad(R=1)$$</div>
+    <p>So the circuit performs gradient descent on the predictive-coding energy, with no clock and no processor. It comes to rest exactly where the currents balance:</p>
+    <div class="math">$$x^\star \;=\; \frac{w\,y}{1 + w^2},$$</div>
+    <p>the best (maximum-a-posteriori) estimate of the cause.</p>
+
+    <h3 id="scaling-up">Scaling up</h3>
+    <ul>
+      <li>Replace the single <b>×w</b> amplifiers with crossbars. One direction computes the predictions \(W x\). Driven the other way, the <i>same</i> conductances send the errors back up as \(W^{\top}\varepsilon\). Predictive coding's top-down and bottom-up pathways share one physical array.</li>
+      <li>Learning, \(\Delta W \propto \varepsilon\, x^{\top}\), is an outer product of two locally available signals. Crossbars can apply it to every weight at once by overlapping voltage pulses on rows and columns.</li>
+      <li>Analog hardware is <b>noisy</b>, with device variability, drift and limited precision. Energy-based models are forgiving here, and sampling-based predictive coding even <i>needs</i> noise to explore its beliefs.</li>
+    </ul>
+    <div class="callout">The appeal is efficiency: the inference step costs the energy of letting charge settle, instead of shuttling numbers through a processor billions of times.</div>
+        <p class="small muted" style="margin-top:20px">Next: <a href="fun.html">for fun: AI products that run themselves →</a></p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-mark">Gaspard<br>Oliviers</div>
+        <div class="footer-col"><span class="label">Research</span><a href="predictive-coding.html">Predictive coding</a><a href="logic-gates.html">Logic gate networks</a><a href="analog.html">Analog ML</a></div>
+        <div class="footer-col"><span class="label">Building</span><a href="fun.html#ai-stack">AI Stack</a><a href="fun.html#datascience-agents">Data-science agents</a><a href="fun.html#have-you-seen-my-quant">Have you seen my quant</a><a href="kpis.html">KPIs</a></div>
+        <div class="footer-col"><span class="label">Elsewhere</span><a href="https://scholar.google.com/citations?user=_jjDIqEAAAAJ">Google Scholar</a><a href="https://github.com/gaspardol">GitHub</a><a href="https://www.instagram.com/have_you_seen_my_quant/">Instagram</a></div>
+      </div>
+      <div class="footer-base"><span>© 2026 Gaspard Oliviers</span><span>Hand-built · KPIs refresh daily · <a href="https://github.com/gaspardol/gaspardol.github.io">Source</a></span></div>
+    </div>
+  </footer>
+</body>
+</html>
