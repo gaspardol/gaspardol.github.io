@@ -15,10 +15,9 @@ cat > "$PLIST" <<PLIST
   <key>Label</key><string>$LABEL</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/usr/bin/python3</string>
-    <string>$REPO/scripts/update_kpis.py</string>
-    <string>--views-ledger</string><string>$LEDGER</string>
-    <string>--push</string>
+    <string>/bin/bash</string>
+    <string>-c</string>
+    <string>/usr/bin/python3 "$REPO/scripts/update_kpis.py" --views-ledger "$LEDGER" --push</string>
   </array>
   <key>EnvironmentVariables</key>
   <dict><key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string></dict>
