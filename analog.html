@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Alternative ML: analog circuits · Gaspard Oliviers</title>
-  <meta name="description" content="Analog machine learning: crossbars that multiply with Ohm's law, and a small circuit that performs predictive coding inference by settling.">
+  <meta name="description" content="Analog machine learning: crossbars that multiply with Ohm's law, and a small circuit that performs predictive coding inference by settling, then learns with local Hebbian updates.">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,6 +16,7 @@
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" defer
           onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
   <script src="assets/circuit.js" defer></script>
+  <script src="assets/circuit-learn.js" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -47,6 +48,7 @@
         <a href="#multiply-add-for-free">Multiply–add for free</a>
         <a href="#let-the-circuit-settle-into-the-answer">Settling = computing</a>
         <a href="#a-predictive-coding-neuron-in-three-part">The circuit</a>
+        <a href="#the-circuit-learns">The circuit learns</a>
         <a href="#scaling-up">Scaling up</a>
       </nav>
       <div>
@@ -110,10 +112,34 @@
     <div class="math">$$x^\star \;=\; \frac{w\,y}{1 + w^2},$$</div>
     <p>the best (maximum-a-posteriori) estimate of the cause.</p>
 
+    <h3 id="the-circuit-learns">Making the circuit learn</h3>
+    <p>Settling finds the best belief for <i>one</i> reading. Learning means changing the weight itself, so that predictions improve across <i>many</i> readings. It's gradient descent on the same energy, this time with respect to the weight:</p>
+    <div class="math">$$\tau_w\,\frac{dw}{dt} \;=\; -\frac{\partial E}{\partial w} \;=\; \underbrace{\varepsilon\,x}_{\text{Hebbian}} \;-\; \underbrace{\alpha\,w}_{\text{leak}}$$</div>
+    <p>The update needs only two signals, and both are already at the weight: the error on its row and the belief on its column. Their product nudges the weight so that the prediction moves towards the reading. A slow leak (a small prior \(\tfrac{\alpha}{2} w^2\) added to \(E\)) keeps it bounded. \(\tau_w\) is much slower than the capacitor, so the circuit infers on every reading and learns across many.</p>
+    <p>One sensor doesn't leave much to learn, so the circuit below gets a second one. A single cause now predicts two readings, \(\hat y = w\,x\) with \(w = (w_1, w_2)\). The two weights sit where the error rows cross the belief column, the crossbar of Fig. 1 in miniature, and each crossing adjusts its own conductance from the voltages on its row and column.</p>
+
+    <figure class="figure wide fig-lilac">
+      <div class="fig-head"><span class="label">Fig. 3 — The circuit learns</span><span class="label">fast inference · slow plasticity</span></div>
+      <div class="learn-grid">
+        <div class="learn-scroll"><svg id="learn-circuit" role="img" aria-label="Two-sensor predictive coding circuit whose crossbar weights learn"></svg></div>
+        <svg id="learn-plane" role="img" aria-label="Sensor readings, the circuit's line of predictions and the learned weight vector"></svg>
+      </div>
+      <svg id="learn-plot" role="img" aria-label="Angle between the weights and the data, and prediction error, over time"></svg>
+      <div class="controls">
+        <label class="control">learning rate <span class="sym">η</span> <input type="range" id="lc-eta" min="0" max="1.5" step="0.05" value="0.6"><output id="lc-eta-out"></output></label>
+        <button class="btn" id="lc-rotate">Rotate the data</button>
+        <button class="btn" id="lc-scramble">Scramble the weights</button>
+        <span class="readout" id="lc-readout"></span>
+      </div>
+      <figcaption>Each reading \((y_1, y_2)\) is held on the sensors for half a second while the capacitor settles. In the data plane, the dashed line is everything the circuit can predict (\(\hat y = w\,x\) for any belief \(x\)), the arrow is \(w\), and the red segment is the error on the current reading. The crossings glow while they update. The line swings onto the cloud and the errors shrink. Rotate the data and it relearns. At \(\eta = 0\) the weights freeze and only inference runs.</figcaption>
+    </figure>
+
+    <p>Where does it settle? The arrow ends up along the direction in which the readings vary most: the data's <b>first principal component</b>, the same answer PCA gives. The leak removes any direction whose variance is smaller than \(\alpha\), and only the main axis survives. The circuit finds it from local signals, with no clock and no processor. Real conductances can't go negative, so a signed weight is built from a pair of devices whose difference is used.</p>
+
     <h3 id="scaling-up">Scaling up</h3>
     <ul>
       <li>Replace the single <b>×w</b> amplifiers with crossbars. One direction computes the predictions \(W x\). Driven the other way, the <i>same</i> conductances send the errors back up as \(W^{\top}\varepsilon\). Predictive coding's top-down and bottom-up pathways share one physical array.</li>
-      <li>Learning, \(\Delta W \propto \varepsilon\, x^{\top}\), is an outer product of two locally available signals. Crossbars can apply it to every weight at once by overlapping voltage pulses on rows and columns.</li>
+      <li>Learning is the rule from Fig. 3 at every crossing at once: \(\Delta W \propto \varepsilon\, x^{\top}\), the outer product of the row and column signals. Overlapping voltage pulses on rows and columns apply it to the whole array in one step.</li>
       <li>Analog hardware is <b>noisy</b>, with device variability, drift and limited precision. Energy-based models are forgiving here, and sampling-based predictive coding even <i>needs</i> noise to explore its beliefs.</li>
     </ul>
     <div class="callout">The appeal is efficiency: the inference step costs the energy of letting charge settle, instead of shuttling numbers through a processor billions of times.</div>
