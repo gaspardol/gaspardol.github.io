@@ -764,10 +764,14 @@
     [
      "2026-10-22",
      213
+    ],
+    [
+     "2026-10-23",
+     214
     ]
    ],
-   "value": 213,
-   "updated": "2026-10-22T10:08:06+00:00",
+   "value": 214,
+   "updated": "2026-10-23T10:01:03+00:00",
    "extra": {
     "top": [
      [
@@ -780,7 +784,7 @@
      ],
      [
       "gaspardol/MonteCarloPredictiveCoding",
-      15
+      16
      ],
      [
       "gaspardol/BidirectionalPredictiveCoding",
@@ -991,5 +995,5 @@
    }
   }
  },
- "updated": "2026-10-22T10:08:06+00:00"
+ "updated": "2026-10-23T10:01:03+00:00"
 }
